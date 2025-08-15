@@ -143,7 +143,9 @@ jQuery(document).ready(function ($) {
 		const expiryTime = sessionStorage.getItem(STORAGE_EXPIRY_KEY);
 
 		if (!storedValue || !expiryTime) {
-			return null;
+			// Fallback to cookie if session storage doesn't have the value
+			const cookieFallback = getLeadSourceCookie();
+			return cookieFallback;
 		}
 
 		const now = new Date().getTime();
@@ -151,10 +153,28 @@ jQuery(document).ready(function ($) {
 			// Expired, clear storage
 			sessionStorage.removeItem(STORAGE_KEY);
 			sessionStorage.removeItem(STORAGE_EXPIRY_KEY);
-			return null;
+			// Fallback to cookie if session entry expired
+			const cookieFallback = getLeadSourceCookie();
+			return cookieFallback;
 		}
 
 		return storedValue;
+	}
+
+	/**
+	 * Get rentfetch_lead_source cookie value
+	 */
+	function getLeadSourceCookie() {
+		var name = 'rentfetch_lead_source=';
+		var decodedCookie = decodeURIComponent(document.cookie || '');
+		var ca = decodedCookie.split(';');
+		for (var i = 0; i < ca.length; i++) {
+			var c = ca[i].trim();
+			if (c.indexOf(name) === 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -311,8 +331,11 @@ jQuery(document).ready(function ($) {
 			);
 		}
 
-		// Get tracking value (from current URL or stored)
-		const trackingValue = currentParam || getStoredTrackingParam();
+		// Get tracking value (from current URL or stored). Fallback to cookie if session missing.
+		let trackingValue = currentParam || getStoredTrackingParam();
+		if (!trackingValue) {
+			trackingValue = getLeadSourceCookie();
+		}
 
 		if (trackingValue) {
 			// Process existing links
@@ -337,10 +360,14 @@ jQuery(document).ready(function ($) {
 
 	// Re-process links when new content is loaded (for AJAX sites)
 	$(document).on('DOMNodeInserted', function (e) {
-		const trackingValue = getStoredTrackingParam();
-		if (trackingValue && $(e.target).find('a[href]').length > 0) {
+		// Prefer session-stored param, fallback to cookie
+		var value = getStoredTrackingParam();
+		if (!value) {
+			value = getLeadSourceCookie();
+		}
+		if (value && $(e.target).find('a[href]').length > 0) {
 			setTimeout(function () {
-				processExternalLinks(trackingValue);
+				processExternalLinks(value);
 			}, 100);
 		}
 	});
