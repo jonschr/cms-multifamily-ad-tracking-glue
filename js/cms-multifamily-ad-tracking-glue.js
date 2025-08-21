@@ -162,10 +162,11 @@ jQuery(document).ready(function ($) {
 	}
 
 	/**
-	 * Get rentfetch_lead_source cookie value
+	 * Get wordpress_rentfetch_lead_source cookie value
 	 */
 	function getLeadSourceCookie() {
-		var name = 'rentfetch_lead_source=';
+		// New cookie name used across plugins; legacy name may still exist but we prefer the new one.
+		var name = 'wordpress_rentfetch_lead_source=';
 		var decodedCookie = decodeURIComponent(document.cookie || '');
 		var ca = decodedCookie.split(';');
 		for (var i = 0; i < ca.length; i++) {

@@ -3,7 +3,7 @@
 	Plugin Name: CMS Multifamily Ad Tracking Glue
 	Plugin URI: https://brindledigital.com
 	Description: Just another plugin
-	Version: 0.2
+	Version: 0.2.1
 	Author: Jon Schroeder
 	Author URI: https://brindledigital.com
 
@@ -28,10 +28,10 @@ if ( !defined( 'ABSPATH' ) ) {
 define( 'CMSMULTI_GLUE_DIR', dirname( __FILE__ ) );
 
 // Define the version of the plugin
-define ( 'CMSMULTI_GLUE_VERSION', '0.2' );
+define ( 'CMSMULTI_GLUE_VERSION', '0.2.1' );
 
 /**
- * If the URL contains switch_cls[id]=..., set a sitewide rentfetch_lead_source cookie for 30 days.
+ * If the URL contains switch_cls[id]=..., set a sitewide wordpress_rentfetch_lead_source cookie for 30 days.
  * We set this early on `init` so direct visits get the cookie before any JS runs.
  */
 function cmsmulti_glue_set_lead_source_cookie() {
@@ -78,7 +78,8 @@ function cmsmulti_glue_set_lead_source_cookie() {
 
 	$value = sanitize_text_field( $value );
 
-	$cookie_name = 'rentfetch_lead_source';
+	// Use the shared, namespaced cookie name to avoid collisions with other plugins.
+	$cookie_name = 'wordpress_rentfetch_lead_source';
 	$cookie_lifetime_seconds = 30 * 24 * 60 * 60; // 30 days
 	$expires = time() + $cookie_lifetime_seconds;
 
