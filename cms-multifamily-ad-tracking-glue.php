@@ -134,4 +134,4 @@ $update_checker = Puc_v4_Factory::buildUpdateChecker(
 );
 
 // Optional: Set the branch that contains the stable release.
-$update_checker->setBranch( 'main' );
+$update_checker->setBranch( 'master' );
