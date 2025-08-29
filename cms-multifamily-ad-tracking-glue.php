@@ -3,7 +3,7 @@
 	Plugin Name: CMS Multifamily Ad Tracking Glue
 	Plugin URI: https://brindledigital.com
 	Description: Just another plugin
-	Version: 1.0
+	Version: 1.0.1
 	Author: Jon Schroeder
 	Author URI: https://brindledigital.com
 
@@ -28,7 +28,7 @@ if ( !defined( 'ABSPATH' ) ) {
 define( 'CMSMULTI_GLUE_DIR', dirname( __FILE__ ) );
 
 // Define the version of the plugin
-define ( 'CMSMULTI_GLUE_VERSION', '1.0' );
+define ( 'CMSMULTI_GLUE_VERSION', '1.0.1' );
 
 /**
  * If the URL contains switch_cls[id]=..., set a sitewide wordpress_rentfetch_lead_source cookie for 30 days.
