@@ -3,7 +3,7 @@
 	Plugin Name: CMS Multifamily Ad Tracking Glue
 	Plugin URI: https://brindledigital.com
 	Description: Just another plugin
-	Version: 0.2.1
+	Version: 1.0
 	Author: Jon Schroeder
 	Author URI: https://brindledigital.com
 
@@ -28,7 +28,7 @@ if ( !defined( 'ABSPATH' ) ) {
 define( 'CMSMULTI_GLUE_DIR', dirname( __FILE__ ) );
 
 // Define the version of the plugin
-define ( 'CMSMULTI_GLUE_VERSION', '0.2.1' );
+define ( 'CMSMULTI_GLUE_VERSION', '1.0' );
 
 /**
  * If the URL contains switch_cls[id]=..., set a sitewide wordpress_rentfetch_lead_source cookie for 30 days.
@@ -123,3 +123,14 @@ function cmsmulti_glue_enqueue_scripts() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'cmsmulti_glue_enqueue_scripts' );
+
+// Load Plugin Update Checker.
+require RENTFETCHSYNC_DIR . 'vendor/plugin-update-checker/plugin-update-checker.php';
+$update_checker = Puc_v4_Factory::buildUpdateChecker(
+	'https://github.com/jonschr/cms-multifamily-ad-tracking-glue',
+	__FILE__,
+	'cms-multifamily-ad-tracking-glue'
+);
+
+// Optional: Set the branch that contains the stable release.
+$update_checker->setBranch( 'main' );
